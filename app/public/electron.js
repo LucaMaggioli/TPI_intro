@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron'); // electron
+const { app, BrowserWindow, ipcMain } = require('electron'); // electron
 const isDev = require('electron-is-dev'); // To check if electron is in development mode
 const path = require('path');
 
@@ -80,4 +80,14 @@ process.on('uncaughtException', (error) => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+//setting electron backend api
+//testing send data from electron
+ipcMain.handle('test-invoke', (event, args)=>{
+  return "Data from Electron";
+});
+//testing send calendar data from electron
+ipcMain.handle('get-calendar', (event, args)=>{
+  return {'january':[1,2,3,4,5,6,7],'february':[1,2,3,4,5,6,7],'mars':[1,2,3,4,5,6,7]};
 });
