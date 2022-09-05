@@ -49,25 +49,35 @@ let clients = [
         invoices:[]
     },
     {
-        id: 1,
+        id: 2,
         name:"Marco Carb. SA",
         address:"Rte de Bussigny 33",
         npa:"1020",
-        projects: [],
+        projects: [
+            {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+        ],
         invoices:[]
     },
     {
-        id: 1,
+        id: 3,
         name:"Yann Bern. SA",
         address:"Ch. de la campagne 22",
         npa:"1007",
-        projects: [],
+        projects: [
+            {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
+            {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
+        ],
         invoices:[]
     },
   ];
 
-export function getClients(){
+  export function getClients(){
     return clients;
+}
+export function getClientById(id){
+    return clients.find(
+        (client)=> client.id === id
+    );
 }
 export function getInvoices() {
   return invoices;
