@@ -1,6 +1,9 @@
 import logo from './logo.svg';
 import './App.css';
+import CalendarPage,{About, Day, Home, Month, Users, Week, Year} from './calendar-page/CalendarPage'
 import {useState} from 'react'
+import { BrowserRouter, Routes, Link, Route } from "react-router-dom";
+
 
 function App() {
   const [data, setData] = useState();
@@ -16,28 +19,38 @@ function App() {
     console.log(electronResponse);
     // setCalendar(electronResponse);
   }
+  function App1(){
+    return(<>Hello</>);
+  }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <br></br>
-        <button onClick={()=>{helloHandler();calendarHandler()}}>Helllo</button>
-        <h2>{data}</h2>
-        <h2>{calendar}</h2>
-      </header>
+      <BrowserRouter>
+        <nav>
+          <Link to="/calendar">Calendar page</Link>
+          <Link to="/">Home</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<App1/>}/>
+          <Route path="/calendar" element={<CalendarPage/>}>
+            <Route path="/calendar/year" element={<Year />}/>
+            <Route path="/calendar/month" element={<Month />}/>
+            <Route path="/calendar/week" element={<Week />}/>
+            <Route path="day" element={<Day />}/>
+          </Route>
+          <Route
+            path="*"
+            element={
+              <main style={{ padding: "1rem" }}>
+                <p>404 Page not found</p>
+              </main>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </div>
+
+    
   );
 }
 
