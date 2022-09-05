@@ -6,23 +6,10 @@ export default function ClientDetails(){
     const [client, setClient] = useState()
     let params = useParams();
     let locClient = getClientById(parseInt(params.clientId))
-    // console.log(params.clientId)
-    // console.log(locClient)
-    // useEffect(()=>{
-    //     setClient(locClient);
-    // });
 
     return(<>
         <h3>CLient details:</h3>
         <p>Id : {params.clientId}</p>
-        {/* <ul>
-            <li>{locClient.id}</li>
-            <li>{locClient.name}</li>
-            <li>{locClient.address}</li>
-            <li>{locClient.npa}</li>
-            <li>{locClient.projects}</li>
-            <li>{locClient.invoices}</li>
-        </ul> */}
         <ul>
             <li>{locClient.id}</li>
             <li>{locClient.name}</li>

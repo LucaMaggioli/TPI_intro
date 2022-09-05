@@ -71,7 +71,7 @@ let clients = [
     },
   ];
 
-  export function getClients(){
+export function getClients(){
     return clients;
 }
 export function getClientById(id){
