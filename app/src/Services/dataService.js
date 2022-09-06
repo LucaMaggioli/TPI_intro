@@ -214,9 +214,17 @@ export function getClients(){
     return clients;
 }
 export function getClientById(id){
-    return clients.find(
+  return clients.find(
+      (client)=> client.id === id
+  );
+}
+export function editClientById(id, newClient){
+    let oldClient = clients.find(
         (client)=> client.id === id
     );
+    oldClient.name = newClient.name;
+    oldClient.address = newClient.address;
+    oldClient.npa = newClient.npa;
 }
 export function getInvoices() {
   return invoices;
