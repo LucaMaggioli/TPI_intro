@@ -33,23 +33,23 @@ export default function ClientList(props){
         <Box style={cardContainerStyle}>
             {clients.map((client) => (
                 <Card key={client.id} sx={cardStyle}>
-                <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    {client.name}
-                </Typography>
-                <Typography variant="h5" component="div">
-                    be{bull}nev{bull}o{bull}lent
-                </Typography>
-                <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
-                </Typography>
-                </CardContent>
-                <CardActions>
-                <NavLink to={`/client/${client.id}`}><Button size="small">More Info</Button></NavLink>
-                </CardActions>
-            </Card>
+                    <CardContent>
+                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                            {client.name}
+                        </Typography>
+                        <Typography variant="h5" component="div">
+                            be{bull}nev{bull}o{bull}lent
+                        </Typography>
+                        <Typography variant="body2">
+                            well meaning and kindly.
+                            <br />
+                            {'"a benevolent smile"'}
+                        </Typography>
+                    </CardContent>
+                    <CardActions>
+                        <NavLink to={`/client/${client.id}`}><Button size="small">More Info</Button></NavLink>
+                    </CardActions>
+                </Card>
             ))}
         </Box>
     )
