@@ -42,7 +42,6 @@ function App() {
     padding:8
   }
   const contentStyle= {
-    // height: 'calc(100vh-60px)'
   }
 
   return (

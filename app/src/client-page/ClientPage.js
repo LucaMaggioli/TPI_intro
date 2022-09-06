@@ -21,7 +21,6 @@ export default function ClientPage(){
     display:'grid',
     overflow:'none',
     height:'100%',
-    // gridTemplateRows:'1fr 4fr'
   }
   const listStyle={
     height: '450px',

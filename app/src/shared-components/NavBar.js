@@ -24,7 +24,6 @@ export default function NavBar(){
                 <Close onClick={()=>setIsOpen(false)}/>
             </div>
         :
-        // <div style={{ ...navbarStyle, ...{gridTemplateColumns:'1fr', width:'10vh'}}}>
         <div style={navbarStyle}>
             <Menu onClick={()=>setIsOpen(true)}></Menu>
         </div>

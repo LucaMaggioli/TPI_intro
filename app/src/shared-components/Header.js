@@ -6,8 +6,6 @@ import { Typography } from "@mui/material";
 export default function Header(props){
 
     const HeaderStyle = {
-        // height: '10vh',
-        // width: '100vw',
         display: 'flex',
         flexDirection: 'row',
         justifyContent:'left',
