@@ -32,6 +32,7 @@ function App() {
   const appStyle = {
     background: 'rgb(46,10,190)',
     background: 'linear-gradient(45deg, rgba(46,10,190,0.4) 0%, rgba(237,198,215,0.6) 0%, rgba(132,95,201,1) 100%)',
+    overflow: 'hidden',
     height: '100vh',
     width: '100%',
   }

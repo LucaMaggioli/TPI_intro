@@ -32,6 +32,10 @@ export function Day(props) {
     <input label="year"></input>
     <input label="month"></input>
     <input label="day"></input>
+    <input label="day"></input>
+    <input label="day"></input>
+    <input label="day"></input>
+    <input label="day"></input>
     <button onClick={()=>addDAy(12,12,12)}>Add day</button>
     <button>show calendar</button>
     {/* {calendar.forEach(element => {
@@ -61,6 +65,9 @@ export default function CalendarPage() {
               <Link to="/calendar/day">day</Link>
             </li>
             <li>
+              <Link to={`/calendar/day`}>day</Link>
+              <Link to={`/calendar/day`}>day</Link>
+              <Link to={`/calendar/day`}>day</Link>
               <Link to={`/calendar/day`}>day</Link>
               {/* <Link to={`/calendar/${}`}>day</Link> */}
             </li>

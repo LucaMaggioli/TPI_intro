@@ -49,15 +49,141 @@ let clients = [
         invoices:[]
     },
     {
-        id: 2,
-        name:"Marco Carb. SA",
-        address:"Rte de Bussigny 33",
-        npa:"1020",
-        projects: [
-            {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
-        ],
-        invoices:[]
-    },
+      id: 2,
+      name:"Marco Carb. SA",
+      address:"Rte de Bussigny 33",
+      npa:"1020",
+      projects: [
+          {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+      ],
+      invoices:[]
+  }, {
+    id: 2,
+    name:"Marco Carb. SA",
+    address:"Rte de Bussigny 33",
+    npa:"1020",
+    projects: [
+        {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+    ],
+    invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+},   {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+}, {
+  id: 2,
+  name:"Marco Carb. SA",
+  address:"Rte de Bussigny 33",
+  npa:"1020",
+  projects: [
+      {id:2, name:"E-commerce", desc:"Vente de chaussettes parfumées"}
+  ],
+  invoices:[]
+},
     {
       id: 3,
       name:"Yann Bern. SA",
@@ -67,9 +193,12 @@ let clients = [
           {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
           {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
       ],
-      invoices:[]
+      invoices:[
+        {id:0, name:"first Invoice", amount:555.12, date:new Date('2022-09-06')},
+        {id:1, name:"invoice for wow doungeon", amount:750.05, date:new Date(2022, 9, 9)}
+      ]
   },    {
-    id: 3,
+    id: 4,
     name:"Yann Bern. SA",
     address:"Ch. de la campagne 22",
     npa:"1007",
@@ -78,93 +207,7 @@ let clients = [
         {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
     ],
     invoices:[]
-},    {
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},    {
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},    {
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},
-{
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},
-{
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},
-{
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},
-{
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},
-{
-  id: 3,
-  name:"Yann Bern. SA",
-  address:"Ch. de la campagne 22",
-  npa:"1007",
-  projects: [
-      {id:0, name:"Shield TV config", desc:"Brieve lorem ipsum"},
-      {id:1, name:"Wow dounjeon", desc:"Brieve lorem ipsum"}
-  ],
-  invoices:[]
-},
-
+}
   ];
 
 export function getClients(){
