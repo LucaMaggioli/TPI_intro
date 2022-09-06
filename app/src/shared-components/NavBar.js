@@ -7,8 +7,8 @@ export default function NavBar(){
 
     const navbarStyle = {
         backgroundColor: 'rgb(215, 215, 215)',
-        height: '10vh',
-        width: '38vw',
+        height: '60px',
+        width: isOpen?'260px':'60px',
         display: 'flex',
         flexDirection: 'row',
         justifyContent:'space-evenly',
@@ -24,7 +24,8 @@ export default function NavBar(){
                 <Close onClick={()=>setIsOpen(false)}/>
             </div>
         :
-        <div style={{ ...navbarStyle, ...{gridTemplateColumns:'1fr', width:'10vh'}}}>
+        // <div style={{ ...navbarStyle, ...{gridTemplateColumns:'1fr', width:'10vh'}}}>
+        <div style={navbarStyle}>
             <Menu onClick={()=>setIsOpen(true)}></Menu>
         </div>
     return value;

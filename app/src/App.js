@@ -6,6 +6,9 @@ import {useState} from 'react'
 import { BrowserRouter, Routes, Link, Route } from "react-router-dom";
 import ClientDetails from './client-page/ClientDetails';
 import NavBar from './shared-components/NavBar';
+import ClientList from './client-page/ClientList';
+import { Box } from '@mui/material';
+
 
 
 function App() {
@@ -26,35 +29,52 @@ function App() {
     return(<>Hello</>);
   }
 
+  const appStyle = {
+    background: 'rgb(46,10,190)',
+    background: 'linear-gradient(45deg, rgba(46,10,190,0.4) 0%, rgba(237,198,215,0.6) 0%, rgba(132,95,201,1) 100%)',
+    height: '100vh',
+    width: '100%',
+  }
+  const navbarStyle= {
+    display:'flex',
+    flexDirection:'row',
+    justifyContent:'right',
+    padding:8
+  }
+  const contentStyle= {
+    // height: 'calc(100vh-60px)'
+  }
+
   return (
-    <div className="App">
+    <div style={appStyle} >
       <BrowserRouter>
-        <div style={{display:'flex', flexDirection:'row', justifyContent:'right', padding:8}}>
+        <Box style={navbarStyle}>
           <NavBar/>
-        </div>
-        <Routes>
-          <Route path="/" element={<App1/>}/>
-          <Route path="/calendar" element={<CalendarPage/>}>
-            <Route path="/calendar/year" element={<Year />}/>
-            <Route path="/calendar/month" element={<Month />}/>
-            <Route path="/calendar/week" element={<Week />}/>
-            <Route path="day" element={<Day />}/>
-          </Route>
-          <Route path='/client' element={<ClientPage/>}></Route>
-          <Route path='/client/:clientId' element={<ClientDetails/>}></Route>
-          <Route
-            path="*"
-            element={
-              <main style={{ padding: "1rem" }}>
-                <p>404 Page not found</p>
-              </main>
-            }
-          />
-        </Routes>
+        </Box>
+        <Box style={contentStyle}>
+          <Routes>
+            <Route path="/" element={<App1/>}/>
+            <Route path="/calendar" element={<CalendarPage/>}>
+              <Route path="/calendar/year" element={<Year />}/>
+              <Route path="/calendar/month" element={<Month />}/>
+              <Route path="/calendar/week" element={<Week />}/>
+              <Route path="day" element={<Day />}/>
+            </Route>
+            <Route path='/client' element={<ClientPage/>}>
+              <Route path='/client/:clientId' element={<ClientDetails/>}></Route>
+            </Route>
+            <Route
+              path="*"
+              element={
+                <main style={{ padding: "1rem" }}>
+                  <p>404 Page not found</p>
+                </main>
+              }
+            />
+          </Routes>
+        </Box>
       </BrowserRouter>
     </div>
-
-    
   );
 }
 
