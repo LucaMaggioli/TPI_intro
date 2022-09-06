@@ -40,9 +40,8 @@ function App() {
             <Route path="/calendar/week" element={<Week />}/>
             <Route path="day" element={<Day />}/>
           </Route>
-          <Route path='/client' element={<ClientPage/>}>
-            <Route path='/client/:clientId' element={<ClientDetails/>}></Route>
-          </Route>
+          <Route path='/client' element={<ClientPage/>}></Route>
+          <Route path='/client/:clientId' element={<ClientDetails/>}></Route>
           <Route
             path="*"
             element={

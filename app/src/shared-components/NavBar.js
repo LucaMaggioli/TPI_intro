@@ -11,7 +11,7 @@ export default function NavBar(){
         width: '38vw',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent:'spaceEvenly',
+        justifyContent:'space-evenly',
         alignItems:'center',
         borderRadius:'50px'
     }
