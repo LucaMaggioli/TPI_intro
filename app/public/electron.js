@@ -91,3 +91,9 @@ ipcMain.handle('test-invoke', (event, args)=>{
 ipcMain.handle('get-calendar', (event, args)=>{
   return {'january':[1,2,3,4,5,6,7],'february':[1,2,3,4,5,6,7],'mars':[1,2,3,4,5,6,7]};
 });
+// testing send data data from electron
+ipcMain.handle('get-clients', (event, args)=>{
+  let clients = localStorage.getItem('clients');
+  console.log(clients)
+  return clients
+});

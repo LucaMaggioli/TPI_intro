@@ -210,8 +210,18 @@ let clients = [
 }
   ];
 
-export function getClients(){
-    return clients;
+export async function getClients(){
+    // return clients;
+    // let clients = await window.api.getClients();
+    // let clients = localStorage.getItem('clients');
+    // console.log(clients)
+    // if (clients === null) {
+    //   clients = []
+    //   localStorage.setItem('clients', clients) 
+    // }
+
+    console.log(clients)
+    return new Promise((resolve, reject) => {resolve(clients)})
 }
 export function getClientById(id){
   return clients.find(

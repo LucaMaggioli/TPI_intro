@@ -6,11 +6,16 @@ import { Event, Group } from '@mui/icons-material';
 
 import { getClients } from '../Services/dataService';
 import Header from './../shared-components/Header'
+import Footer from './../shared-components/Footer'
 import ClientList from './ClientList';
 
 
 export default function ClientPage(){
-  let clients = getClients();
+  const [clients, setClients] = useState([])
+
+  getClients().then((result)=>setClients(result));
+  console.log("clients")
+  console.log(clients)
 
   let location = useLocation();
   let pathMatchUserDetails = location.pathname.match('/client/[0-9]') !== null;
@@ -32,6 +37,7 @@ export default function ClientPage(){
       <Header icon={headerIcon} link={link}></Header>
       {!pathMatchUserDetails && <Box style={listStyle}><ClientList clients={clients}></ClientList></Box>}
       <Outlet/>
+      <Footer/>
     </Box>
   )
 }

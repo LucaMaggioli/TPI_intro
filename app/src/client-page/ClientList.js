@@ -31,7 +31,7 @@ export default function ClientList(props){
 
     return (
         <Box style={cardContainerStyle}>
-            {clients.map((client) => (
+            {(clients.length > 0) && clients.map((client) => (
                 <Card key={client.id} sx={cardStyle}>
                     <CardContent>
                         <Typography variant="h5" component="div">
