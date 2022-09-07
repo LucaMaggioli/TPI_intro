@@ -1,26 +1,33 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import { Event, Group } from '@mui/icons-material';
 
-import { getClients } from '../Services/dataService';
+import { getClients, getClientById, createClient } from '../Services/dataService';
 import Header from './../shared-components/Header'
 import Footer from './../shared-components/Footer'
 import ClientList from './ClientList';
+import ClientDetails from './ClientDetails';
 
 
 export default function ClientPage(){
   const [clients, setClients] = useState([])
+  const [currentClient, setCurrentClient] = useState(null)
+  const [isNewClient, setIsNewClient] = useState(false)
+  const [displayUserInfo, setDisplayUserInfo] = useState(false)
+  
 
-  getClients().then((result)=>setClients(result));
-  console.log("clients")
-  console.log(clients)
+  useEffect(()=>{
+    getClients().then((result)=>setClients(result));
+    console.log("clients")
+    console.log(clients)
+  }, [])
 
   let location = useLocation();
-  let pathMatchUserDetails = location.pathname.match('/client/[0-9]') !== null;
-  let headerIcon = pathMatchUserDetails?<Group/>:<Event/>
-  let link = pathMatchUserDetails?'/client':'/calendar'
+  let navigate = useNavigate();
+  // let displayUserInfo = currentClient !== null;
+  let headerIcon = displayUserInfo?<Group/>:<Event/>
 
   const clientPageStyle = {
     display:'grid',
@@ -32,12 +39,51 @@ export default function ClientPage(){
     overflow: 'auto'
   }
 
+  function addClient(){
+    setCurrentClient({'id':-1})
+    setIsNewClient(true)
+    setDisplayUserInfo(true)
+    // console.log("should navigate to new client")
+    // getClientById(clients.length + 1)
+    //   .then((result)=>{
+    //     setCurrentClient(result)
+    //     setIsNewClient(true)
+    //   })
+  }
+  function displayInfo(id){
+    console.log(`display info about id: ${id}`)
+    getClientById(id).then((result)=>{
+      setCurrentClient(result)
+      setDisplayUserInfo(true)
+    })
+  }
+  function handleHeaderBackEvent(){
+    displayUserInfo ? setDisplayUserInfo(false) && setCurrentClient(null) : navigate('/calendar')
+
+    // currentClient === null ? navigate('/calendar') : setCurrentClient(null);
+  }
+  function createClientHandler(newClient){
+    createClient(newClient).then((result)=>{ 
+      let client = result
+      console.log(`added client succesfully: ${client}`)
+      console.log(client)
+      setClients((clients) => clients.concat(client))
+      console.log(clients)
+      setIsNewClient(false)
+      setDisplayUserInfo(false)
+    })
+  }
+
   return(
     <Box style={clientPageStyle}>
-      <Header icon={headerIcon} link={link}></Header>
-      {!pathMatchUserDetails && <Box style={listStyle}><ClientList clients={clients}></ClientList></Box>}
-      <Outlet/>
-      <Footer/>
+      <Header icon={headerIcon} backEvent={handleHeaderBackEvent}></Header>
+      {!displayUserInfo &&
+        <Box style={listStyle}>
+          <ClientList clients={clients} onMoreInfo={displayInfo}/>
+          </Box>
+      }
+      {displayUserInfo && <ClientDetails client={currentClient} createMode={isNewClient} onCreateClient={createClientHandler}/>}
+      {!displayUserInfo && <Footer onAdd={addClient}/>}
     </Box>
   )
 }

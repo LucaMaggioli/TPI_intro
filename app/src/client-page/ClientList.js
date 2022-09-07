@@ -44,7 +44,8 @@ export default function ClientList(props){
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <NavLink to={`/client/${client.id}`}><Button size="small">More Info</Button></NavLink>
+                        <Button size="small" onClick={()=>props.onMoreInfo(client.id)}>More Info</Button>
+                        {/* <NavLink to={`/client/${client.id}`}><Button size="small">More Info</Button></NavLink> */}
                     </CardActions>
                 </Card>
             ))}

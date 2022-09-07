@@ -1,7 +1,5 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import { ArrowBackIos } from '@mui/icons-material';
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export default function Header(props){
 
@@ -13,12 +11,10 @@ export default function Header(props){
         marginLeft:'2vw'
     }
     
-    return (<div style={HeaderStyle}>
-            <Typography variant="h4">
-                <NavLink to={props.link}>
-                    <ArrowBackIos></ArrowBackIos>
-                    {props.icon}
-                </NavLink>
+    return (<Box style={HeaderStyle}>
+            <Typography variant="h4" onClick={()=>{props.backEvent()}}>
+                <ArrowBackIos></ArrowBackIos>
+                {props.icon}
             </Typography>
-        </div>);
+        </Box>);
 }

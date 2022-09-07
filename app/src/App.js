@@ -61,7 +61,7 @@ function App() {
               <Route path="day" element={<Day />}/>
             </Route>
             <Route path='/client' element={<ClientPage/>}>
-              <Route path='/client/:clientId' element={<ClientDetails/>}></Route>
+              {/* <Route path='/client/:clientId' element={<ClientDetails/>}></Route> */}
             </Route>
             <Route
               path="*"

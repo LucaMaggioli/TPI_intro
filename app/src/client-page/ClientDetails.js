@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import Box from '@mui/material/Box';
@@ -11,14 +11,16 @@ import TextField from '@mui/material/TextField';
 
 import { getClientById, editClientById } from "../Services/dataService";
 
-export default function ClientDetails(){
+export default function ClientDetails(props){
     const [editMode, setEditMode] = useState(false)
+    const [normalMode, setNormalMode] = useState(!editMode && !props.createMode)
     
-    let params = useParams();
-    // let cli = getClientById(parseInt(params.clientId))
-    const [client, setClient] = useState(getClientById(parseInt(params.clientId)))
+    const [client, setClient] = useState(null)
     const [clientChanges, setClientChanges] = useState({...client})
 
+    useEffect(()=>{
+        setClient(props.client)
+    }, [])
 
     const cardStyle = {
         width:'40vw',
@@ -62,71 +64,94 @@ export default function ClientDetails(){
     function resetChanges(){
         setClientChanges({...client});
     }
+    function createClient(){
+        console.log(clientChanges)
+        props.onCreateClient(clientChanges)
+        resetChanges()
+    }
 
     return(
         <Box>
-            <Card key={client.id} sx={cardStyle}>
-                <CardContent>
-                    {editMode?
-                        <TextField id="cliName" label="name" variant="filled" value={clientChanges.name} onChange={nameChanges} />
-                    :
-                        <Typography variant="h5" component="div">
-                            {client.name}
-                        </Typography>
-                    }
-                    {editMode?
-                        <Box style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
-                            <TextField id="cliAddress" label="address" variant="filled" value={clientChanges.address} onChange={addressChanges} />
-                            <TextField id="cliNpa" label="npa" variant="filled" value={clientChanges.npa} onChange={npaChanges} />
-                        </Box>
-                    :
-                        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                            {client.address} : {client.npa}
-                        </Typography>
-                    }
+            {client !== null &&
+                <Card key={client.id} sx={cardStyle}>
+                    <CardContent>
+                        {editMode &&
+                            <TextField id="cliName" label="name" variant="filled" value={clientChanges.name} onChange={nameChanges} />
+                        }
+                        {props.createMode &&
+                            <TextField id="cliName" label="name" variant="filled" value={clientChanges.name} onChange={nameChanges} />
+                        }
+                        {normalMode &&
+                            <Typography variant="h5" component="div">
+                                {client.name}
+                            </Typography>
+                        }
+                        {editMode &&
+                            <Box style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                <TextField id="cliAddress" label="address" variant="filled" value={clientChanges.address} onChange={addressChanges} />
+                                <TextField id="cliNpa" label="npa" variant="filled" value={clientChanges.npa} onChange={npaChanges} />
+                            </Box>
+                        }
+                        {props.createMode &&
+                            <Box style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                                <TextField id="cliAddress" label="address" variant="filled" value={clientChanges.address} onChange={addressChanges} />
+                                <TextField id="cliNpa" label="npa" variant="filled" value={clientChanges.npa} onChange={npaChanges} />
+                            </Box>
+                        }
+                        {normalMode &&
+                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                {client.address} : {client.npa}
+                            </Typography>
+                        }
 
-                    {(client.projects.length > 0) &&
-                        <Box>
-                            <Typography variant="paragraph">
-                                Projects: 
-                            </Typography>
-                            <Box style={subBox}>
-                            {client.projects.map((project)=>(
-                                <Button style={projButtonStyle} variant="outlined" key={project.id}>#{project.id} - {project.name}</Button>
-                            ))}
+                        {!props.createMode && 
+                        (client.projects.length > 0) &&
+                            <Box>
+                                <Typography variant="paragraph">
+                                    Projects: 
+                                </Typography>
+                                <Box style={subBox}>
+                                {client.projects.map((project)=>(
+                                    <Button style={projButtonStyle} variant="outlined" key={project.id}>#{project.id} - {project.name}</Button>
+                                ))}
+                                </Box>
                             </Box>
-                        </Box>
-                    }
-                    {(client.invoices.length > 0) &&
-                        <Box>
-                            <Typography variant="paragraph">
-                                invoices: 
-                            </Typography>
-                            <Box style={subBox}>
-                            {client.invoices.map((invoice)=>(
-                                <Button style={projButtonStyle} variant="outlined" key={invoice.id}>
-                                    #{invoice.id} | {' '}
-                                    {invoice.date.getFullYear()}-
-                                    {invoice.date.getUTCMonth()}-
-                                    {invoice.date.getUTCDate()}
-                                    {' '}| {invoice.amount}CHF
-                                    </Button>
-                            ))}
+                        }
+                        {!props.createMode && 
+                        (client.invoices.length > 0) &&
+                            <Box>
+                                <Typography variant="paragraph">
+                                    invoices: 
+                                </Typography>
+                                <Box style={subBox}>
+                                {client.invoices.map((invoice)=>(
+                                    <Button style={projButtonStyle} variant="outlined" key={invoice.id}>
+                                        #{invoice.id} | {' '}
+                                        {invoice.date.getFullYear()}-
+                                        {invoice.date.getUTCMonth()}-
+                                        {invoice.date.getUTCDate()}
+                                        {' '}| {invoice.amount}CHF
+                                        </Button>
+                                ))}
+                                </Box>
                             </Box>
-                        </Box>
-                    }
-                </CardContent>
-                <CardActions>
-                    {editMode?
-                    <Box sx={{display:'flex', flexDirection:'row', gridGap:'8px'}}>
-                        <Button onClick={()=>{setEditMode(false); saveChanges()}} size="small" variant='contained' color="success">Save</Button>
-                        <Button onClick={()=>{setEditMode(false); resetChanges()}} size="small" variant='contained' color="error">Discard</Button>
-                    </Box>
-                    :
-                        <Button onClick={()=>setEditMode(true)} size="small">Edit</Button>
-                    }
-                </CardActions>
-            </Card>
+                        }
+                    </CardContent>
+                    <CardActions>
+                        {editMode &&
+                        <Box sx={{display:'flex', flexDirection:'row', gridGap:'8px'}}>
+                            <Button onClick={()=>{setEditMode(false); saveChanges()}} size="small" variant='contained' color="success">Save</Button>
+                            <Button onClick={()=>{setEditMode(false); resetChanges()}} size="small" variant='contained' color="error">Discard</Button>
+                        </Box>}
+                        {!editMode && !props.createMode &&
+                            <Button onClick={()=>setEditMode(true)} size="small">Edit</Button>
+                        }
+                        {props.createMode &&
+                            <Button onClick={createClient} size="small">Create</Button>
+                        }
+                    </CardActions>
+                </Card>
+            }
         </Box>
     )
 }
