@@ -1,6 +1,90 @@
 const { app, BrowserWindow, ipcMain } = require('electron'); // electron
 const isDev = require('electron-is-dev'); // To check if electron is in development mode
 const path = require('path');
+const sqlite3 = require('sqlite3');
+
+const db = new sqlite3.Database(
+  isDev
+    ? path.join(__dirname, '../db/myAppDb.db') // my root folder if in dev mode
+    : path.join(process.resourcesPath, 'db/myAppDb.db'), // the resources path if in production build
+  (err) => {
+    if (err) {
+      console.log(`Database Error: ${err}`);
+    } else {
+      console.log('Database Loaded');
+    }
+  }
+);
+//Creation of client table
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS client (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    address TEXT NOT NULL,
+    city TEXT NOT NULL,
+    npa TEXT NOT NULL,
+    phone TEXT UNIQUE
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS project (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    startdate TEXT NOT NULL,
+    client_id INTEGER NOT NULL,
+    FOREIGN KEY (client_id)
+       REFERENCES client (id) 
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS invoice (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    amount REAL NOT NULL,
+    description TEXT NOT NULL,
+    startdate TEXT NOT NULL,
+    client_id INTEGER NOT NULL,
+    FOREIGN KEY (client_id)
+       REFERENCES client (id) 
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS event (
+    id INTEGER PRIMARY KEY,
+    startDate TEXT NOT NULL,
+    endDate TEXT NOT NULL,
+    description TEXT NOT NULL,
+    project_id INTEGER NOT NULL,
+    FOREIGN KEY (project_id)
+       REFERENCES client (id) 
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
 
 let mainWindow;
 
@@ -64,6 +148,13 @@ app.whenReady().then(async () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+    //Closing database
+    db.close((err) => {
+      if (err) {
+        console.error(err.message);
+      }
+      console.log('Close the database connection.');
+    });
   }
 });
 
