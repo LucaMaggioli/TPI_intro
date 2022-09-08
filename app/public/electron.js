@@ -15,7 +15,7 @@ const db = new sqlite3.Database(
     }
   }
 );
-//Creation of client table
+//Creation of tables if they not exists
 db.serialize(() => {
   db.each(`CREATE TABLE IF NOT EXISTS client (
     id INTEGER PRIMARY KEY,
@@ -91,7 +91,7 @@ let mainWindow;
 // Initializing the Electron Window
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 600, // width of window
+    width: 1200, // width of window
     height: 600, // height of window
     webPreferences: {
       // The preload file where we will perform our app communication
@@ -148,7 +148,7 @@ app.whenReady().then(async () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
-    //Closing database
+    //Closing database when the app is closed
     db.close((err) => {
       if (err) {
         console.error(err.message);
