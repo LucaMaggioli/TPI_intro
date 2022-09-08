@@ -19,7 +19,7 @@ export default function ClientPage(){
   
 
   useEffect(()=>{
-    getClients().then((result)=>setClients(result));
+    // getClients().then((result)=>setClients(result));k
     console.log("clients")
     console.log(clients)
   }, [])
@@ -77,6 +77,7 @@ export default function ClientPage(){
     // initClient()
     console.log("new created client from ClientDetails component")
     console.log(newClient)
+    
   }
 
   return(
