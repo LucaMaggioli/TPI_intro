@@ -19,14 +19,12 @@ export default function ClientPage(){
   
 
   useEffect(()=>{
-    // getClients().then((result)=>setClients(result));k
     console.log("clients")
     console.log(clients)
   }, [])
 
   let location = useLocation();
   let navigate = useNavigate();
-  // let displayUserInfo = currentClient !== null;
   let headerIcon = displayUserInfo?<Group/>:<Event/>
 
   const clientPageStyle = {
@@ -43,12 +41,7 @@ export default function ClientPage(){
     setCurrentClient({'id':-1})
     setIsNewClient(true)
     setDisplayUserInfo(true)
-    // console.log("should navigate to new client")
-    // getClientById(clients.length + 1)
-    //   .then((result)=>{
-    //     setCurrentClient(result)
-    //     setIsNewClient(true)
-    //   })
+
   }
   function displayInfo(id){
     console.log(`display info about id: ${id}`)
@@ -59,8 +52,6 @@ export default function ClientPage(){
   }
   function handleHeaderBackEvent(){
     displayUserInfo ? setDisplayUserInfo(false) && setCurrentClient(null) : navigate('/calendar')
-
-    // currentClient === null ? navigate('/calendar') : setCurrentClient(null);
   }
   function createClientHandler(newClient){
     createClient(newClient).then((result)=>{ 
@@ -77,7 +68,7 @@ export default function ClientPage(){
     // initClient()
     console.log("new created client from ClientDetails component")
     console.log(newClient)
-    
+
   }
 
   return(
