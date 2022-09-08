@@ -184,7 +184,19 @@ ipcMain.handle('get-calendar', (event, args)=>{
 });
 // testing send data data from electron
 ipcMain.handle('get-clients', (event, args)=>{
-  let clients = localStorage.getItem('clients');
   console.log(clients)
   return clients
+});
+
+// handling of create-client event in electronjs
+ipcMain.handle('create-client', (event, args)=>{
+  console.log('handling of create-client event in electronjs: ')
+  
+  //Excecuting database query
+  db.serialize(() => {
+    db.run(`INSERT INTO client (name, email, address, city, npa, phone)
+    VALUES('${args.name}', '${args.email}', '${args.address}', '${args.city}', '${args.npa}', '${args.phone}');`)
+    ;
+  });
+  return 'ElectronMessage: Client added to Database'
 });

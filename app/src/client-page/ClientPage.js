@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Box from '@mui/material/Box';
 import { Event, Group } from '@mui/icons-material';
 
-import { getClients, getClientById, createClient, initClient } from '../Services/dataService';
+import { getClients, getClientById, createClient } from '../Services/dataService';
 import Header from './../shared-components/Header'
 import Footer from './../shared-components/Footer'
 import ClientList from './ClientList';
@@ -68,7 +68,11 @@ export default function ClientPage(){
     // initClient()
     console.log("new created client from ClientDetails component")
     console.log(newClient)
-
+    createClient(newClient).then((result)=>{
+      // receiving the result of createClient dataService function
+      console.log("receiving the result of createClient dataService function")
+      console.log(result);
+    })
   }
 
   return(
