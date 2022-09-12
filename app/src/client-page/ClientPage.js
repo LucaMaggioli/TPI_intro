@@ -19,8 +19,10 @@ export default function ClientPage(){
   
 
   useEffect(()=>{
-    console.log("clients")
-    console.log(clients)
+    getClients().then((result)=>{
+      setClients(result);
+      console.log(result)
+    });
   }, [])
 
   let location = useLocation();
@@ -41,7 +43,6 @@ export default function ClientPage(){
     setCurrentClient({'id':-1})
     setIsNewClient(true)
     setDisplayUserInfo(true)
-
   }
   function displayInfo(id){
     console.log(`display info about id: ${id}`)
