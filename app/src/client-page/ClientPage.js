@@ -11,10 +11,26 @@ import ClientList from './ClientList';
 import ClientDetails from './ClientDetails';
 
 
+
+
+const clientPageStyle = {
+  display:'grid',
+  overflow:'none',
+  height:'100%',
+}
+const listStyle={
+  height: '450px',
+  overflow: 'auto'
+}
+
+
 export default function ClientPage(){
+  const [dataLoaded, setDataLoaded] = useState([])
   const [clients, setClients] = useState([])
   const [currentClient, setCurrentClient] = useState(null)
   const [isNewClient, setIsNewClient] = useState(false)
+
+  const [creatingNewClient, setCreatingNewClient] = useState(false)
   const [displayUserInfo, setDisplayUserInfo] = useState(false)
   
 
@@ -23,26 +39,19 @@ export default function ClientPage(){
       setClients(result);
       console.log(result)
     });
+    setDataLoaded(true)
   }, [])
 
-  let location = useLocation();
   let navigate = useNavigate();
-  let headerIcon = displayUserInfo?<Group/>:<Event/>
+  let headerIcon = displayUserInfo || creatingNewClient?<Group/>:<Event/>
+  // useEffect(()=>{
+  //   headerIcon = displayUserInfo || creatingNewClient?<Group/>:<Event/>
+  // }, [creatingNewClient, displayUserInfo])
 
-  const clientPageStyle = {
-    display:'grid',
-    overflow:'none',
-    height:'100%',
-  }
-  const listStyle={
-    height: '450px',
-    overflow: 'auto'
-  }
+  console.log(`displayUserInfo : ${displayUserInfo}, creatingNewClient: ${creatingNewClient}`)
 
   function addClient(){
-    setCurrentClient({'id':-1})
-    setIsNewClient(true)
-    setDisplayUserInfo(true)
+    setCreatingNewClient(true)
   }
   function displayInfo(id){
     console.log(`display info about id: ${id}`)
@@ -52,7 +61,14 @@ export default function ClientPage(){
     })
   }
   function handleHeaderBackEvent(){
-    displayUserInfo ? setDisplayUserInfo(false) && setCurrentClient(null) : navigate('/calendar')
+    if((displayUserInfo) || (creatingNewClient)){
+      console.log("set states to null")
+      setDisplayUserInfo(false);
+      setCreatingNewClient(false);
+    }
+    else{
+      navigate('/calendar')
+    }
   }
   function createClientHandler(newClient){
     createClient(newClient).then((result)=>{ 
@@ -74,6 +90,7 @@ export default function ClientPage(){
       console.log("receiving the result of createClient dataService function")
       console.log(result);
     })
+    setCreatingNewClient(false)
   }
 
   return(
@@ -86,8 +103,16 @@ export default function ClientPage(){
       }
       {displayUserInfo && <ClientDetails client={currentClient} createMode={isNewClient} onCreateClient={createClientHandler}/>} */}
       <p>heyy</p>
-      <ClientDetails client={{name:'pata',email:'ti'}} createMode={true} onCreateClient={handleCreateClient}/>
-      {/* {!displayUserInfo && <Footer onAdd={addClient}/>} */}
+      {/* {dataLoaded && !CreatingNewClient && <Box style={clientListStyle}>
+        {console.log("In renderer clients ts")}
+        {console.log(clients)}
+        {clients.map((client)=>{
+          {console.log(client)}
+          return(<ClientDetails client={client}/>)
+        })}
+      </Box>} */}
+      {dataLoaded && !creatingNewClient && <ClientList clients={clients}/>}
+      {creatingNewClient && <ClientDetails createMode={creatingNewClient} onCreateClient={handleCreateClient}/>}
       <Footer onAdd={addClient}/>
     </Box>
   )

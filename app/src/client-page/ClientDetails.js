@@ -40,6 +40,8 @@ export default function ClientDetails(props){
 
 
     useEffect(()=>{ 
+        console.log("client in clientDetail component")
+        console.log(props.client)
         setClient(props.client)
         setCreateMode(props.createMode)
 
@@ -53,8 +55,6 @@ export default function ClientDetails(props){
                 phone:'',
             })//should be 'new client()' object.. but lmao.-
         }
-        console.log(client)
-        console.log(editedClient)
         setCompoLoaded(true)
     },[])
 
