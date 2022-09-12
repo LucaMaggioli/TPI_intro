@@ -20,7 +20,8 @@ const cardContainerStyle = {
     gridGap:'2em',
     justifyItems: 'center',
     margin: '2em',
-    padding: '2em'
+    padding: '2em',
+    overflow: 'auto'
 }
 const cardStyle = {
     margin:0
@@ -45,7 +46,7 @@ export default function ClientList(props){
                     </CardContent>
                     <CardActions>
                         <Button size="small" onClick={()=>props.onMoreInfo(client.id)}>More Info</Button>
-                        {/* <NavLink to={`/client/${client.id}`}><Button size="small">More Info</Button></NavLink> */}
+                        <Button size="small" onClick={()=>props.onDelete(client.id)}>Delete</Button>
                     </CardActions>
                 </Card>
             ))}

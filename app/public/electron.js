@@ -217,3 +217,18 @@ ipcMain.handle('create-client', async (event, args)=>{
   });
   return data
 });
+
+ipcMain.handle('delete-client', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`DELETE FROM client WHERE id = ${args}`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      // resolve(this.lastID)
+      resolve(true)
+    })
+  });
+  return data
+});

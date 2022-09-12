@@ -14,4 +14,5 @@ contextBridge.exposeInMainWorld('api', {
     getCalendar:  (args) => ipcRenderer.invoke('get-calendar', args),
     getClients: (args) => ipcRenderer.invoke('get-clients', args),
     createClient: (args) => ipcRenderer.invoke('create-client', args),
+    deleteClientById: (args) => ipcRenderer.invoke('delete-client', args),
   });

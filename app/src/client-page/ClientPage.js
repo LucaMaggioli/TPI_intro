@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Box from '@mui/material/Box';
 import { Event, Group } from '@mui/icons-material';
 
-import { getClients, getClientById, createClient } from '../Services/dataService';
+import { getClients, getClientById, createClient, deleteClientById } from '../Services/dataService';
 import Header from './../shared-components/Header'
 import Footer from './../shared-components/Footer'
 import ClientList from './ClientList';
@@ -44,22 +44,11 @@ export default function ClientPage(){
 
   let navigate = useNavigate();
   let headerIcon = displayUserInfo || creatingNewClient?<Group/>:<Event/>
-  // useEffect(()=>{
-  //   headerIcon = displayUserInfo || creatingNewClient?<Group/>:<Event/>
-  // }, [creatingNewClient, displayUserInfo])
-
-  console.log(`displayUserInfo : ${displayUserInfo}, creatingNewClient: ${creatingNewClient}`)
 
   function addClient(){
     setCreatingNewClient(true)
   }
-  function displayInfo(id){
-    console.log(`display info about id: ${id}`)
-    getClientById(id).then((result)=>{
-      setCurrentClient(result)
-      setDisplayUserInfo(true)
-    })
-  }
+
   function handleHeaderBackEvent(){
     if((displayUserInfo) || (creatingNewClient)){
       console.log("set states to null")
@@ -70,49 +59,43 @@ export default function ClientPage(){
       navigate('/calendar')
     }
   }
-  function createClientHandler(newClient){
-    createClient(newClient).then((result)=>{ 
-      let client = result
-      console.log(`added client succesfully: ${client}`)
-      console.log(client)
-      setClients((clients) => clients.concat(client))
-      console.log(clients)
-      setIsNewClient(false)
-      setDisplayUserInfo(false)
+
+  function handleDetete (id){
+    deleteClientById(id).then(result=>{
+      if(result){
+        console.log(`client with id ${id} succesfully deleted`)
+        clients.map((client)=>{
+          if(client.id === id){
+            let index = clients.indexOf(client)
+            let newClients = [...clients.slice(0, index), ...clients.slice(index+1, clients.length)]
+            setClients(newClients);
+          }
+        })
+      }
     })
   }
+
   function handleCreateClient (newClient){
-    // initClient()
-    console.log("new created client from ClientDetails component")
-    console.log(newClient)
+    // send the new created client from ClientDetails component to dataService
     createClient(newClient).then((result)=>{
       // receiving the result of createClient dataService function
-      console.log("receiving the result of createClient dataService function")
       console.log(result);
+      if(result){
+        setClients(clients => [...clients, newClient])
+      }
+    }).catch(err=>{
+      console.log("error occured while adding client")
+      console.error(err)
     })
+    
     setCreatingNewClient(false)
   }
 
   return(
     <Box style={clientPageStyle}>
       <Header icon={headerIcon} backEvent={handleHeaderBackEvent}></Header>
-      {/* {!displayUserInfo &&
-        <Box style={listStyle}>
-          <ClientList clients={clients} onMoreInfo={displayInfo}/>
-          </Box>
-      }
-      {displayUserInfo && <ClientDetails client={currentClient} createMode={isNewClient} onCreateClient={createClientHandler}/>} */}
-      <p>heyy</p>
-      {/* {dataLoaded && !CreatingNewClient && <Box style={clientListStyle}>
-        {console.log("In renderer clients ts")}
-        {console.log(clients)}
-        {clients.map((client)=>{
-          {console.log(client)}
-          return(<ClientDetails client={client}/>)
-        })}
-      </Box>} */}
-      {dataLoaded && !creatingNewClient && <ClientList clients={clients}/>}
-      {creatingNewClient && <ClientDetails createMode={creatingNewClient} onCreateClient={handleCreateClient}/>}
+      {dataLoaded && !creatingNewClient && <ClientList clients={clients} onDelete={handleDetete}/>}
+      {creatingNewClient && <ClientDetails createMode={creatingNewClient} onCreateClient={handleCreateClient} />}
       <Footer onAdd={addClient}/>
     </Box>
   )
