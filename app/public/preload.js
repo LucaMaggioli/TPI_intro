@@ -12,4 +12,6 @@ contextBridge.exposeInMainWorld('testApi', {
 contextBridge.exposeInMainWorld('api', {
     // Invoke Methods
     getCalendar:  (args) => ipcRenderer.invoke('get-calendar', args),
+    getClients: (args) => ipcRenderer.invoke('get-clients', args),
+    createClient: (args) => ipcRenderer.invoke('create-client', args),
   });

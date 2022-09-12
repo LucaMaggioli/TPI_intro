@@ -1,13 +1,97 @@
 const { app, BrowserWindow, ipcMain } = require('electron'); // electron
 const isDev = require('electron-is-dev'); // To check if electron is in development mode
 const path = require('path');
+const sqlite3 = require('sqlite3');
+
+const db = new sqlite3.Database(
+  isDev
+    ? path.join(__dirname, '../db/myAppDb.db') // my root folder if in dev mode
+    : path.join(process.resourcesPath, 'db/myAppDb.db'), // the resources path if in production build
+  (err) => {
+    if (err) {
+      console.log(`Database Error: ${err}`);
+    } else {
+      console.log('Database Loaded');
+    }
+  }
+);
+//Creation of tables if they not exists
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS client (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    address TEXT NOT NULL,
+    city TEXT NOT NULL,
+    npa TEXT NOT NULL,
+    phone TEXT UNIQUE
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS project (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    startdate TEXT NOT NULL,
+    client_id INTEGER NOT NULL,
+    FOREIGN KEY (client_id)
+       REFERENCES client (id) 
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS invoice (
+    id INTEGER PRIMARY KEY,
+    title TEXT NOT NULL,
+    amount REAL NOT NULL,
+    description TEXT NOT NULL,
+    startdate TEXT NOT NULL,
+    client_id INTEGER NOT NULL,
+    FOREIGN KEY (client_id)
+       REFERENCES client (id) 
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
+db.serialize(() => {
+  db.each(`CREATE TABLE IF NOT EXISTS event (
+    id INTEGER PRIMARY KEY,
+    startDate TEXT NOT NULL,
+    endDate TEXT NOT NULL,
+    description TEXT NOT NULL,
+    project_id INTEGER NOT NULL,
+    FOREIGN KEY (project_id)
+       REFERENCES client (id) 
+  );`, (err, row) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log(row.id + "\t" + row.name);
+  });
+});
+
 
 let mainWindow;
 
 // Initializing the Electron Window
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 600, // width of window
+    width: 1200, // width of window
     height: 600, // height of window
     webPreferences: {
       // The preload file where we will perform our app communication
@@ -64,6 +148,13 @@ app.whenReady().then(async () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
+    //Closing database when the app is closed
+    db.close((err) => {
+      if (err) {
+        console.error(err.message);
+      }
+      console.log('Close the database connection.');
+    });
   }
 });
 
@@ -90,4 +181,22 @@ ipcMain.handle('test-invoke', (event, args)=>{
 //testing send calendar data from electron
 ipcMain.handle('get-calendar', (event, args)=>{
   return {'january':[1,2,3,4,5,6,7],'february':[1,2,3,4,5,6,7],'mars':[1,2,3,4,5,6,7]};
+});
+// testing send data data from electron
+ipcMain.handle('get-clients', (event, args)=>{
+  console.log(clients)
+  return clients
+});
+
+// handling of create-client event in electronjs
+ipcMain.handle('create-client', (event, args)=>{
+  console.log('handling of create-client event in electronjs: ')
+  
+  //Excecuting database query
+  db.serialize(() => {
+    db.run(`INSERT INTO client (name, email, address, city, npa, phone)
+    VALUES('${args.name}', '${args.email}', '${args.address}', '${args.city}', '${args.npa}', '${args.phone}');`)
+    ;
+  });
+  return 'ElectronMessage: Client added to Database'
 });
