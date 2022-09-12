@@ -232,3 +232,38 @@ ipcMain.handle('delete-client', async (event, args)=>{
   });
   return data
 });
+
+ipcMain.handle('get-client-by-id', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`SELECT * FROM client WHERE id = ${args}`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      resolve(result[0])
+    })
+  });
+  return data
+})
+
+ipcMain.handle('edit-client', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`UPDATE client
+    SET name = '${args.name}',
+    email = '${args.email}',
+    address = '${args.address}',
+    city = '${args.city}',
+    npa = '${args.npa}',
+    phone = '${args.phone}'
+    WHERE id = ${args.id};`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      resolve(true)
+    })
+  });
+  return data
+})

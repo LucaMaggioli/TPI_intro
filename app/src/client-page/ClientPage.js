@@ -4,13 +4,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Box from '@mui/material/Box';
 import { Event, Group } from '@mui/icons-material';
 
-import { getClients, getClientById, createClient, deleteClientById } from '../Services/dataService';
+import { getClients, getClientById, createClient, deleteClientById, editClient } from '../Services/dataService';
 import Header from './../shared-components/Header'
 import Footer from './../shared-components/Footer'
 import ClientList from './ClientList';
 import ClientDetails from './ClientDetails';
-
-
 
 
 const clientPageStyle = {
@@ -91,11 +89,48 @@ export default function ClientPage(){
     setCreatingNewClient(false)
   }
 
+  function handleMoreInfo (id){
+    getClientById(id).then((client)=>{
+      // receiving the result of createClient dataService function
+      console.log(client);
+      if(client){
+        setCurrentClient(client)
+      }
+    }).catch(err=>{
+      console.log(`error occured while get client by id ${id}`)
+      console.error(err)
+    })
+  }
+
+  function handleEdit(editedClient){
+    console.log("editedClient in clipage")
+    console.log(editedClient)
+    editClient(editedClient).then((result)=>{
+      console.log(result)
+      if(result){
+        clients.map((client)=>{
+          console.log("editedClient in map")
+          if(client.id === editedClient.id){
+            let index = clients.indexOf(client)
+            let newClients = [...clients]
+            //replacing the old client with the new client that we edited
+            newClients.splice(index, 1, editedClient)
+            setClients(newClients);
+            setCurrentClient(null);
+          }
+        })
+      }
+    }).catch(err=>{
+      console.log(`error occured while editing client ${editedClient.id}`)
+      console.error(err)
+    })
+  }
+
   return(
     <Box style={clientPageStyle}>
       <Header icon={headerIcon} backEvent={handleHeaderBackEvent}></Header>
-      {dataLoaded && !creatingNewClient && <ClientList clients={clients} onDelete={handleDetete}/>}
-      {creatingNewClient && <ClientDetails createMode={creatingNewClient} onCreateClient={handleCreateClient} />}
+      {dataLoaded && !creatingNewClient && currentClient === null && <ClientList clients={clients} onDelete={handleDetete} onMoreInfo={handleMoreInfo}/>}
+      {creatingNewClient || currentClient!==null && <ClientDetails createMode={creatingNewClient} client={currentClient} onCreateClient={handleCreateClient} onEditClient={handleEdit}/>}
       <Footer onAdd={addClient}/>
     </Box>
   )
