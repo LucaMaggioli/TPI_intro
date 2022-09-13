@@ -1,7 +1,8 @@
 import './App.css';
 import CalendarPage,{About, Day, Home, Month, Users, Week, Year} from './calendar-page/CalendarPage'
 import ClientPage from './clients-page/ClientPage'
-import { BrowserRouter, Routes, Link, Route } from "react-router-dom";
+import ProjectPage from './projects-page/ProjectPage'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from './shared-components/NavBar';
 import { Box } from '@mui/material';
 
@@ -33,15 +34,15 @@ function App() {
         </Box>
         <Box style={contentStyle}>
           <Routes>
-            <Route path="/" element={<App1/>}/>
+            <Route path="/" element={<CalendarPage/>}/>
             <Route path="/calendar" element={<CalendarPage/>}>
               <Route path="/calendar/year" element={<Year />}/>
               <Route path="/calendar/month" element={<Month />}/>
               <Route path="/calendar/week" element={<Week />}/>
               <Route path="day" element={<Day />}/>
             </Route>
-            <Route path='/client' element={<ClientPage/>}>
-            </Route>
+            <Route path='/clients' element={<ClientPage/>}></Route>
+            <Route path='/projects' element={<ProjectPage/>}></Route>
             <Route
               path="*"
               element={
