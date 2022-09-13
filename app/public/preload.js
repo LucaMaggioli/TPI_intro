@@ -17,4 +17,9 @@ contextBridge.exposeInMainWorld('api', {
     editClient: (args) => ipcRenderer.invoke('edit-client', args),
     deleteClientById: (args) => ipcRenderer.invoke('delete-client', args),
     getClientById: (args) => ipcRenderer.invoke('get-client-by-id', args),
+
+    getProjects: (args) => ipcRenderer.invoke('get-projects', args),
+    createProject: (args) => ipcRenderer.invoke('create-project', args),
+    editProject: (args) => ipcRenderer.invoke('edit-project', args),
+    deleteProjectById: (args) => ipcRenderer.invoke('delete-project', args),
   });

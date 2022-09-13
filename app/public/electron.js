@@ -267,3 +267,71 @@ ipcMain.handle('edit-client', async (event, args)=>{
   });
   return data
 })
+
+ipcMain.handle('get-projects', async (event, args)=>{
+  console.log('handling of get-projects event in electronjs: ')
+
+  //creating a new promise to rsolve the result of the query
+  let data = await new Promise((resolve, reject)=>{
+    db.all("SELECT * from project",((err, result)=>{
+      // resolving the result of the query$
+      console.log(result)
+      resolve(result)
+    }))
+  })
+  //returning the result of the promise that contain the query
+  return data;
+});
+
+// handling of create-client event in electronjs
+ipcMain.handle('create-project', async (event, args)=>{
+  console.log('handling of create-project event in electronjs: ')
+  
+  //Excecuting database query
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`INSERT INTO project (name, description, startdate, client_id)
+    VALUES('${args.name}', '${args.description}', '${args.startdate}', '${args.client_id}');`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      // resolve(this.lastID)
+      resolve(true)
+    })
+  });
+  return data
+});
+
+ipcMain.handle('edit-project', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`UPDATE project
+    SET name = '${args.name}',
+    description = '${args.description}',
+    startdate = '${args.startdate}',
+    client_id = '${args.client_id}'
+    WHERE id = ${args.id};`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving(returning) the result of the query as true to say that the sql operation has been succeded
+      resolve(true)
+    })
+  });
+  return data
+})
+
+ipcMain.handle('delete-project', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`DELETE FROM project WHERE id = ${args}`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query as true to say that the sql operation has been succeded
+      resolve(true)
+    })
+  });
+  return data
+});

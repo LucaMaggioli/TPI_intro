@@ -19,8 +19,8 @@ export default function NavBar(){
     let value = isOpen ? 
                 <div style={navbarStyle}>
                 <NavLink to="/calendar" style={({isActive})=>{return{color:isActive?'blue':'black'}}}><Event/></NavLink>
-                <NavLink to="/client" style={({isActive})=>{return{color:isActive?'blue':'black'}}}><Group/></NavLink>
-                <NavLink to="/project" style={({isActive})=>{return{color:isActive?'blue':'black'}}}><SettingsSuggest/></NavLink>
+                <NavLink to="/clients" style={({isActive})=>{return{color:isActive?'blue':'black'}}}><Group/></NavLink>
+                <NavLink to="/projects" style={({isActive})=>{return{color:isActive?'blue':'black'}}}><SettingsSuggest/></NavLink>
                 <Close onClick={()=>setIsOpen(false)}/>
             </div>
         :

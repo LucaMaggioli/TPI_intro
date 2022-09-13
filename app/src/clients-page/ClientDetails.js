@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -9,26 +8,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-import { getClientById, editClientById } from "../Services/dataService";
-
-
     const cardStyle = {
         width:'40vw',
         height:'66vh',
         margin:'2em',
     }
-    const projButtonStyle = {
-        width: '30vw',
-        height: 'auto',
-        margin: '6px',
-        color: ''
-    }
-    const subBox = {
-        height: '16vh',
-        overflow: 'scroll',
-        overflowX: 'hidden'
-    }
-
 
 export default function ClientDetails(props){
     const [client, setClient] = useState(null)
@@ -53,7 +37,7 @@ export default function ClientDetails(props){
                 city:'',
                 npa:'',
                 phone:'',
-            })//should be 'new client()' object.. but lmao.-
+            })//should be 'new client()' object with ts.. but lmao.-
         }
         setCompoLoaded(true)
     },[])
