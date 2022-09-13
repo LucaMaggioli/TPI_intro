@@ -5,8 +5,8 @@ import Box from '@mui/material/Box';
 import { Event, Group } from '@mui/icons-material';
 
 import { getClients, getClientById, createClient, deleteClientById, editClient } from '../Services/dataService';
-import Header from './../shared-components/Header'
-import Footer from './../shared-components/Footer'
+import Header from '../shared-components/Header'
+import Footer from '../shared-components/Footer'
 import ClientList from './ClientList';
 import ClientDetails from './ClientDetails';
 
@@ -28,7 +28,7 @@ export default function ClientPage(){
   const [currentClient, setCurrentClient] = useState(null)
   const [isNewClient, setIsNewClient] = useState(false)
 
-  const [creatingNewClient, setCreatingNewClient] = useState(false)
+  const [createMode, setCreateMode] = useState(false)
   const [displayUserInfo, setDisplayUserInfo] = useState(false)
   
 
@@ -41,17 +41,19 @@ export default function ClientPage(){
   }, [])
 
   let navigate = useNavigate();
-  let headerIcon = displayUserInfo || creatingNewClient?<Group/>:<Event/>
+  let headerIcon = displayUserInfo || createMode?<Group/>:<Event/>
 
   function addClient(){
-    setCreatingNewClient(true)
+    setCreateMode(true)
+    setCurrentClient(null)
   }
 
   function handleHeaderBackEvent(){
-    if((displayUserInfo) || (creatingNewClient)){
+    if((displayUserInfo) || (createMode)){
       console.log("set states to null")
       setDisplayUserInfo(false);
-      setCreatingNewClient(false);
+      setCreateMode(false);
+      setCurrentClient(null)
     }
     else{
       navigate('/calendar')
@@ -86,7 +88,7 @@ export default function ClientPage(){
       console.error(err)
     })
     
-    setCreatingNewClient(false)
+    setCreateMode(false)
   }
 
   function handleMoreInfo (id){
@@ -95,6 +97,7 @@ export default function ClientPage(){
       console.log(client);
       if(client){
         setCurrentClient(client)
+        setDisplayUserInfo(true)
       }
     }).catch(err=>{
       console.log(`error occured while get client by id ${id}`)
@@ -129,9 +132,9 @@ export default function ClientPage(){
   return(
     <Box style={clientPageStyle}>
       <Header icon={headerIcon} backEvent={handleHeaderBackEvent}></Header>
-      {dataLoaded && !creatingNewClient && currentClient === null && <ClientList clients={clients} onDelete={handleDetete} onMoreInfo={handleMoreInfo}/>}
-      {creatingNewClient || currentClient!==null && <ClientDetails createMode={creatingNewClient} client={currentClient} onCreateClient={handleCreateClient} onEditClient={handleEdit}/>}
-      <Footer onAdd={addClient}/>
+      {dataLoaded && !createMode && !displayUserInfo && <ClientList clients={clients} onDelete={handleDetete} onMoreInfo={handleMoreInfo}/>}
+      {(createMode || currentClient!==null || displayUserInfo) && <ClientDetails createMode={createMode} client={currentClient} onCreateClient={handleCreateClient} onEditClient={handleEdit}/>}
+      {(!createMode || !displayUserInfo) && <Footer onAdd={addClient}/>}
     </Box>
   )
 }
