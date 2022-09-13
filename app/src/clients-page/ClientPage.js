@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Box from '@mui/material/Box';
 import { Event, Group } from '@mui/icons-material';
@@ -16,18 +16,12 @@ const clientPageStyle = {
   overflow:'none',
   height:'100%',
 }
-const listStyle={
-  height: '450px',
-  overflow: 'auto'
-}
 
 
 export default function ClientPage(){
   const [dataLoaded, setDataLoaded] = useState([])
   const [clients, setClients] = useState([])
   const [currentClient, setCurrentClient] = useState(null)
-  const [isNewClient, setIsNewClient] = useState(false)
-
   const [createMode, setCreateMode] = useState(false)
   const [displayUserInfo, setDisplayUserInfo] = useState(false)
   
@@ -106,13 +100,9 @@ export default function ClientPage(){
   }
 
   function handleEdit(editedClient){
-    console.log("editedClient in clipage")
-    console.log(editedClient)
     editClient(editedClient).then((result)=>{
-      console.log(result)
       if(result){
         clients.map((client)=>{
-          console.log("editedClient in map")
           if(client.id === editedClient.id){
             let index = clients.indexOf(client)
             let newClients = [...clients]
