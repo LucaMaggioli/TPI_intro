@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import { Event, Group } from '@mui/icons-material';
 
-import { getClients, getClientById, createClient, deleteClientById, editClient } from '../Services/dataService';
+import { getClients, getClientById, createClient, deleteClientById, editClient } from '../Services/clientDataService';
 import Header from '../shared-components/Header'
 import Footer from '../shared-components/Footer'
 import ClientList from './ClientList';
