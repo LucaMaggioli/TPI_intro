@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron'); // electron
 const isDev = require('electron-is-dev'); // To check if electron is in development mode
+const { resolve } = require('path');
 const path = require('path');
 const sqlite3 = require('sqlite3');
 
@@ -18,7 +19,7 @@ const db = new sqlite3.Database(
 //Creation of tables if they not exists
 db.serialize(() => {
   db.each(`CREATE TABLE IF NOT EXISTS client (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     address TEXT NOT NULL,
@@ -35,7 +36,7 @@ db.serialize(() => {
 
 db.serialize(() => {
   db.each(`CREATE TABLE IF NOT EXISTS project (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     startdate TEXT NOT NULL,
@@ -52,7 +53,7 @@ db.serialize(() => {
 
 db.serialize(() => {
   db.each(`CREATE TABLE IF NOT EXISTS invoice (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     amount REAL NOT NULL,
     description TEXT NOT NULL,
@@ -70,7 +71,7 @@ db.serialize(() => {
 
 db.serialize(() => {
   db.each(`CREATE TABLE IF NOT EXISTS event (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     startDate TEXT NOT NULL,
     endDate TEXT NOT NULL,
     description TEXT NOT NULL,
@@ -183,20 +184,86 @@ ipcMain.handle('get-calendar', (event, args)=>{
   return {'january':[1,2,3,4,5,6,7],'february':[1,2,3,4,5,6,7],'mars':[1,2,3,4,5,6,7]};
 });
 // testing send data data from electron
-ipcMain.handle('get-clients', (event, args)=>{
-  console.log(clients)
-  return clients
+ipcMain.handle('get-clients', async (event, args)=>{
+  console.log('handling of get-clients event in electronjs: ')
+
+  //creating a new promise to rsolve the result of the query
+  let data = await new Promise((resolve, reject)=>{
+    db.all("SELECT * from client",((err, result)=>{
+      // resolving the result of the query
+      resolve(result)
+    }))
+  })
+  //returning the result of the promise that contain the query
+  return data;
 });
 
 // handling of create-client event in electronjs
-ipcMain.handle('create-client', (event, args)=>{
+ipcMain.handle('create-client', async (event, args)=>{
   console.log('handling of create-client event in electronjs: ')
   
   //Excecuting database query
-  db.serialize(() => {
-    db.run(`INSERT INTO client (name, email, address, city, npa, phone)
-    VALUES('${args.name}', '${args.email}', '${args.address}', '${args.city}', '${args.npa}', '${args.phone}');`)
-    ;
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`INSERT INTO client (name, email, address, city, npa, phone)
+    VALUES('${args.name}', '${args.email}', '${args.address}', '${args.city}', '${args.npa}', '${args.phone}');`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      // resolve(this.lastID)
+      resolve(true)
+    })
   });
-  return 'ElectronMessage: Client added to Database'
+  return data
 });
+
+ipcMain.handle('delete-client', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`DELETE FROM client WHERE id = ${args}`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      // resolve(this.lastID)
+      resolve(true)
+    })
+  });
+  return data
+});
+
+ipcMain.handle('get-client-by-id', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`SELECT * FROM client WHERE id = ${args}`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      resolve(result[0])
+    })
+  });
+  return data
+})
+
+ipcMain.handle('edit-client', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`UPDATE client
+    SET name = '${args.name}',
+    email = '${args.email}',
+    address = '${args.address}',
+    city = '${args.city}',
+    npa = '${args.npa}',
+    phone = '${args.phone}'
+    WHERE id = ${args.id};`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+      resolve(true)
+    })
+  });
+  return data
+})

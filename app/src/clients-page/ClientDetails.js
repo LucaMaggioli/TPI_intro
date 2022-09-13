@@ -40,6 +40,8 @@ export default function ClientDetails(props){
 
 
     useEffect(()=>{ 
+        console.log("client in clientDetail component")
+        console.log(props.client)
         setClient(props.client)
         setCreateMode(props.createMode)
 
@@ -53,8 +55,6 @@ export default function ClientDetails(props){
                 phone:'',
             })//should be 'new client()' object.. but lmao.-
         }
-        console.log(client)
-        console.log(editedClient)
         setCompoLoaded(true)
     },[])
 
@@ -62,6 +62,8 @@ export default function ClientDetails(props){
         console.log(`send patch client with new client: `)
         console.log(editedClient)
         props.onEditClient(editedClient)
+        setClient({...editedClient})
+        setEditMode(false)
     }
     function handleDiscard(){
         setEditedClient({...client})
@@ -99,7 +101,11 @@ export default function ClientDetails(props){
                     <CardContent sx={{display:'flex', flexDirection:'column', gridGap:'8px'}}>
                         {client !== null && !editMode && !createMode && <Box>
                                 <Typography variant="h5" component="div"> {client.name} </Typography> 
-                                <Typography sx={{ fontSize: 16 }} component="div"> {client.email} </Typography>
+                                <Typography sx={{ fontSize: 16, margin: 4 }} variant="p" component="div">Mail :  {client.email} </Typography>
+                                <Typography sx={{ fontSize: 16, margin: 4 }} variant="p" component="div">Address :  {client.address} </Typography>
+                                <Typography sx={{ fontSize: 16, margin: 4 }} variant="p" component="div">City :  {client.city} </Typography>
+                                <Typography sx={{ fontSize: 16, margin: 4 }} variant="p" component="div">NPA :  {client.npa} </Typography>
+                                <Typography sx={{ fontSize: 16, margin: 4 }} variant="p" component="div">Phone :  {client.phone} </Typography>
                         </Box>}
                         {(editMode || createMode) && <TextField id="name" label="name" variant="filled" value={editedClient.name} onChange={(e)=>{handleClientChanges(e, 'name')}} />}
                         {(editMode || createMode) && <TextField id="email" label="email" variant="filled" value={editedClient.email} onChange={(e)=>{handleClientChanges(e, 'email')}} />}

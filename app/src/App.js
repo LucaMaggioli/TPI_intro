@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import CalendarPage,{About, Day, Home, Month, Users, Week, Year} from './calendar-page/CalendarPage'
-import ClientPage from './client-page/ClientPage'
+import ClientPage from './clients-page/ClientPage'
 import {useState} from 'react'
 import { BrowserRouter, Routes, Link, Route } from "react-router-dom";
-import ClientDetails from './client-page/ClientDetails';
+import ClientDetails from './clients-page/ClientDetails';
 import NavBar from './shared-components/NavBar';
-import ClientList from './client-page/ClientList';
+import ClientList from './clients-page/ClientList';
 import { Box } from '@mui/material';
 
 
