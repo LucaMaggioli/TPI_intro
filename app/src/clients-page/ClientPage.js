@@ -1,130 +1,92 @@
-import { useEffect, useState } from 'react';
+import { Box } from "@mui/system";
+import Footer from "../shared-components/Footer";
+import Header from "../shared-components/Header";
+import { Event, Group } from '@mui/icons-material';
+import { useEffect, useState } from "react";
+import Element from "../shared-components/Element";
+import { getClients, deleteClientById, createClient, editClient } from "../Services/clientDataService";
 import { useNavigate } from "react-router-dom";
 
-import Box from '@mui/material/Box';
-import { Event, Group } from '@mui/icons-material';
-
-import { getClients, getClientById, createClient, deleteClientById, editClient } from '../Services/clientDataService';
-import Header from '../shared-components/Header'
-import Footer from '../shared-components/Footer'
-import ClientList from './ClientList';
-import ClientDetails from './ClientDetails';
-
-
-const clientPageStyle = {
-  display:'grid',
-  overflow:'none',
-  height:'100%',
-}
-
+const listStyle = {display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gridGap:6, overflow:'auto', height:'70vh', margin:6}
+const clientFields = ['id', 'name', 'email', 'address', 'city', 'npa', 'phone']
 
 export default function ClientPage(){
-  const [dataLoaded, setDataLoaded] = useState([])
-  const [clients, setClients] = useState([])
-  const [currentClient, setCurrentClient] = useState(null)
-  const [createMode, setCreateMode] = useState(false)
-  const [displayUserInfo, setDisplayUserInfo] = useState(false)
-  
+    const [dataLoaded, setDataLoaded] = useState();
+    const [addMode, setAddMode] = useState(false);
+    const [clients, setClients] = useState();
 
-  useEffect(()=>{
-    getClients().then((result)=>{
-      setClients(result);
-      console.log(result)
-    });
-    setDataLoaded(true)
-  }, [])
+    let navigate = useNavigate();
 
-  let navigate = useNavigate();
-  let headerIcon = displayUserInfo || createMode?<Group/>:<Event/>
-
-  function addClient(){
-    setCreateMode(true)
-    setCurrentClient(null)
-  }
-
-  function handleHeaderBackEvent(){
-    if((displayUserInfo) || (createMode)){
-      console.log("set states to null")
-      setDisplayUserInfo(false);
-      setCreateMode(false);
-      setCurrentClient(null)
-    }
-    else{
-      navigate('/calendar')
-    }
-  }
-
-  function handleDetete (id){
-    deleteClientById(id).then(result=>{
-      if(result){
-        console.log(`client with id ${id} succesfully deleted`)
-        clients.map((client)=>{
-          if(client.id === id){
-            let index = clients.indexOf(client)
-            let newClients = [...clients.slice(0, index), ...clients.slice(index+1, clients.length)]
-            setClients(newClients);
-          }
+    useEffect(()=>{
+        getClients().then(data=>{
+            console.log(data);
+            setClients(data);
+            setDataLoaded(true)
+            console.log(data)
         })
-      }
-    })
-  }
+    }, [])
 
-  function handleCreateClient (newClient){
-    // send the new created client from ClientDetails component to dataService
-    createClient(newClient).then((result)=>{
-      // receiving the result of createClient dataService function
-      console.log(result);
-      if(result){
-        setClients(clients => [...clients, newClient])
-      }
-    }).catch(err=>{
-      console.log("error occured while adding client")
-      console.error(err)
-    })
-    
-    setCreateMode(false)
-  }
+    function handleBackEvent(){
+        addMode ? setAddMode(false) : navigate('/calendar')
+    }
 
-  function handleMoreInfo (id){
-    getClientById(id).then((client)=>{
-      // receiving the result of createClient dataService function
-      console.log(client);
-      if(client){
-        setCurrentClient(client)
-        setDisplayUserInfo(true)
-      }
-    }).catch(err=>{
-      console.log(`error occured while get client by id ${id}`)
-      console.error(err)
-    })
-  }
-
-  function handleEdit(editedClient){
-    editClient(editedClient).then((result)=>{
-      if(result){
-        clients.map((client)=>{
-          if(client.id === editedClient.id){
-            let index = clients.indexOf(client)
-            let newClients = [...clients]
-            //replacing the old client with the new client that we edited
-            newClients.splice(index, 1, editedClient)
-            setClients(newClients);
-            setCurrentClient(null);
-          }
+    function handleCreateClient(client){
+        console.log("client to be created")
+        console.log(client)
+        createClient(client).then(result=>{
+            if (result){
+                getClients().then(clients=>{
+                    setClients(clients)
+                    setAddMode(false)
+                })  
+            }
+        });
+    }
+    function handleEditClient(client){
+        editClient(client).then(result=>{
+            if(result){
+                getClients().then(clients=>{
+                    setClients(clients)
+                })        
+            }
         })
-      }
-    }).catch(err=>{
-      console.log(`error occured while editing client ${editedClient.id}`)
-      console.error(err)
-    })
-  }
+    }
+    function handleDeleteClient(client){
+        let confirmed = window.confirm(`Are you sure you want to delete '${client['name']}' ?`)
+        if(confirmed){
+            confirmed = window.confirm(`this operation is unrepairable, click OK to confirm`)
+        }
+        if(confirmed){
+            deleteClientById(client.id).then(result=>{
+                if(result){
+                    getClients().then(clients=>{
+                        setClients(clients)
+                    })
+                }
+            })
+        }
+    }
 
-  return(
-    <Box style={clientPageStyle}>
-      <Header icon={headerIcon} backEvent={handleHeaderBackEvent}></Header>
-      {dataLoaded && !createMode && !displayUserInfo && <ClientList clients={clients} onDelete={handleDetete} onMoreInfo={handleMoreInfo}/>}
-      {(createMode || currentClient!==null || displayUserInfo) && <ClientDetails createMode={createMode} client={currentClient} onCreateClient={handleCreateClient} onEditClient={handleEdit}/>}
-      {(!createMode || !displayUserInfo) && <Footer onAdd={addClient}/>}
-    </Box>
-  )
+    return (<Box>
+        <Header icon={addMode?<Group/>:<Event/>} backEvent={handleBackEvent}/>
+        <Box style={listStyle}>
+            {dataLoaded && !addMode && clients.map(client=>{
+                return(<Element key={client.id}
+                    ignoreFields={['id']}
+                    fields={clientFields}
+                    element={client}
+                    onEditElement={handleEditClient}
+                    onDeleteElement={handleDeleteClient}
+                    />)
+            })}
+            {dataLoaded && addMode &&
+            <Element key={clients[0].id}
+                ignoreFields={['id']}
+                fields={clientFields}
+                element={clients[0]}
+                createMode={true}
+                onCreate={handleCreateClient}/>}
+        </Box>
+        <Footer onAdd={()=>{setAddMode(true)}}/>
+    </Box>)
 }

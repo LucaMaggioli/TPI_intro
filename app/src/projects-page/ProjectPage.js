@@ -1,9 +1,9 @@
 import { Box } from "@mui/system";
 import Footer from "../shared-components/Footer";
 import Header from "../shared-components/Header";
-import { Event, Group, PropaneTank } from '@mui/icons-material';
+import { Event, SettingsSuggest } from '@mui/icons-material';
 import { useEffect, useState } from "react";
-import Element from "./Element";
+import Element from "../shared-components/Element";
 import { getProjects, createProject, editProject, deleteProjectById } from "../Services/projectDataService";
 import { useNavigate } from "react-router-dom";
 
@@ -11,10 +11,8 @@ const listStyle = {display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gridGap
 const projectFields = ['id', 'name', 'description', 'startdate', 'client_id']
 
 export default function ProjectPage(){
-    const [displayList, setDisplayList] = useState();
     const [dataLoaded, setDataLoaded] = useState();
     const [addMode, setAddMode] = useState(false);
-    const [displayDetails, setDisplayDetails] = useState();
     const [projects, setProjects] = useState();
 
     let navigate = useNavigate();
@@ -74,7 +72,7 @@ export default function ProjectPage(){
     }
 
     return (<Box>
-        <Header icon={addMode?<Group/>:<Event/>} backEvent={handleBackEvent}/>
+        <Header icon={addMode?<SettingsSuggest/>:<Event/>} backEvent={handleBackEvent}/>
         <Box style={listStyle}>
             {dataLoaded && !addMode && projects.map(project=>{
                 return(<Element key={project.id}
