@@ -2,14 +2,14 @@ import { Box, Button, Card, CardActions, CardContent, TextField, Typography } fr
 import { useEffect, useState } from "react";
 
 export default function Element(props){
-    const [fields, setFields] = useState(props.fields)
-    const [ignoreFields, setIgnoreFields] = useState(!props.ignoreFields? [] : props.ignoreFields)
+    const [fields] = useState(props.fields)
+    const [ignoreFields] = useState(!props.ignoreFields? [] : props.ignoreFields)
+    const [createMode] = useState(props.createMode===null ? false : props.createMode)
+
     const [element, setElement] = useState(props.element)
-    const [createMode, setCreateMode] = useState(props.createMode===null ? false : props.createMode)
     const [isEditing, setIsEditing] = useState(false)
 
     useEffect(()=>{
-        // setCreateMode(props.createMode)
     }, [])
 
     function handleSave(){
