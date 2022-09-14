@@ -9,7 +9,6 @@ export default function Element(props){
     const [isEditing, setIsEditing] = useState(false)
 
     useEffect(()=>{
-        // setCreateMode(props.createMode)
     }, [])
 
     function handleSave(){
