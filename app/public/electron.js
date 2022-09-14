@@ -235,13 +235,17 @@ ipcMain.handle('delete-client', async (event, args)=>{
 
 ipcMain.handle('get-client-by-id', async (event, args)=>{
   let data = await new Promise ((resolve, reject)=>{
+    if(args === null || args === undefined || args.length < 1){ // checking if id is present
+      console.log("id is null")
+      reject("can't find client with null id in DB")
+    }
     db.all(`SELECT * FROM client WHERE id = ${args}`,
       (err ,result)=>{
         if(err){
           reject(err)
         }
-        // resolving the result of the query
-      resolve(result[0])
+        // resolving the result of the query, if no result, return empty list
+      result !== undefined ? resolve(result[0]) : reject('no client find with that id')
     })
   });
   return data

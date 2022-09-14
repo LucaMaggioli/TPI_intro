@@ -4,25 +4,26 @@ import Header from "../shared-components/Header";
 import { Event, SettingsSuggest } from '@mui/icons-material';
 import { useEffect, useState } from "react";
 import Element from "../shared-components/Element";
-import { getProjects, createProject, editProject, deleteProjectById } from "../Services/projectDataService";
+import { getProjects, createProject, editProject, deleteProjectById, getClientById } from "../Services/projectDataService";
 import { useNavigate } from "react-router-dom";
 
 const listStyle = {display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gridGap:6, overflow:'auto', height:'70vh', margin:6}
 const projectFields = ['id', 'name', 'description', 'startdate', 'client_id']
 
 export default function ProjectPage(){
-    const [dataLoaded, setDataLoaded] = useState();
+    const [dataLoaded, setDataLoaded] = useState(false);
     const [addMode, setAddMode] = useState(false);
     const [projects, setProjects] = useState();
-
+    const [projectsLoaded, setProjectsLoaded] = useState(0);
+    
     let navigate = useNavigate();
 
     useEffect(()=>{
         getProjects().then(data=>{
-            console.log(data);
-            setProjects(data);
-            setDataLoaded(true)
-            console.log(data)
+            setProjectWithClientElement(data).then((projects)=>{
+                setProjects(projects)
+                setDataLoaded(true)
+            });
         })
     }, [])
 
@@ -49,7 +50,7 @@ export default function ProjectPage(){
                 let newProjects = [...projects]
                 //replacing the old client with the new client that we edited
                 newProjects.splice(index, 1, project)
-                setProjects(newProjects);        
+                setProjects(newProjects);
             }
         })
     }
@@ -71,6 +72,26 @@ export default function ProjectPage(){
         }
     }
 
+    function setProjectWithClientElement(data){
+        return new Promise((resolve)=>{
+            let projects = []
+            data.map(project=>{
+                if (project.client_id !== null){
+                    getClientById(project.client_id)
+                        .then(client=>{
+                            project.client = client
+                            setProjectsLoaded(projectsLoaded + 1)
+                        })
+                        .catch((error)=>{
+                            console.log(error)
+                        })
+                }
+                projects.push(project)
+            })
+            resolve(projects)
+        })
+    }
+
     return (<Box>
         <Header icon={addMode?<SettingsSuggest/>:<Event/>} backEvent={handleBackEvent}/>
         <Box style={listStyle}>
@@ -81,8 +102,9 @@ export default function ProjectPage(){
                     element={project}
                     onEditElement={handleEditProject}
                     onDeleteElement={handleDeleteProject}
-                    />)
-            })}
+                    subElement={project['client'] !== undefined?(<Element isSubElement={true} fields={['name','email']} element={project['client']}/>):null}
+                    />)}
+                    )}
             {dataLoaded && addMode &&
             <Element key={projects[0].id}
                 ignoreFields={['id']}
