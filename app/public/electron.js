@@ -1,6 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron'); // electron
 const isDev = require('electron-is-dev'); // To check if electron is in development mode
-const { resolve } = require('path');
 const path = require('path');
 const sqlite3 = require('sqlite3');
 
