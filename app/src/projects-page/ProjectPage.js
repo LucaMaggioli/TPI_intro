@@ -26,11 +26,11 @@ export default function ProjectPage(){
             });
         })
     }, [])
-
+    
+    // Functions block
     function handleBackEvent(){
         addMode ? setAddMode(false) : navigate('/calendar')
     }
-
     function handleCreateProject(project){
         console.log("project to be created")
         console.log(project)

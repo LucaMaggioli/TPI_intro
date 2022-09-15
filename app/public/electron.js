@@ -271,6 +271,20 @@ ipcMain.handle('edit-client', async (event, args)=>{
   });
   return data
 })
+ipcMain.handle('get-projects-client', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`SELECT * from project
+    WHERE client_id = ${args};`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+        result !== undefined ? resolve(result) : reject('no projects found for the given client id')
+    })
+  });
+  return data
+})
 
 ipcMain.handle('get-projects', async (event, args)=>{
   console.log('handling of get-projects event in electronjs: ')
@@ -279,7 +293,6 @@ ipcMain.handle('get-projects', async (event, args)=>{
   let data = await new Promise((resolve, reject)=>{
     db.all("SELECT * from project",((err, result)=>{
       // resolving the result of the query$
-      console.log(result)
       resolve(result)
     }))
   })
