@@ -1,8 +1,8 @@
 import './App.css';
-import CalendarPage,{About, Day, Home, Month, Users, Week, Year} from './calendar-page/CalendarPage'
+import CalendarPage, { Day, Month, Week, Year } from './calendar-page/CalendarPage'
 import ClientPage from './clients-page/ClientPage'
 import ProjectPage from './projects-page/ProjectPage'
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, HashRouter, Routes, Route, Switch } from "react-router-dom";
 import NavBar from './shared-components/NavBar';
 import { Box } from '@mui/material';
 
@@ -28,24 +28,25 @@ function App() {
 
   return (
     <div style={appStyle} >
+      {/* <HashRouter> */}
       <BrowserRouter>
         <Box style={navbarStyle}>
           <NavBar/>
         </Box>
         <Box style={contentStyle}>
           <Routes>
-            <Route path="/" element={<CalendarPage/>}/>
-            <Route path="/calendar" element={<CalendarPage/>}>
-              <Route path="/calendar/year" element={<Year />}/>
-              <Route path="/calendar/month" element={<Month />}/>
-              <Route path="/calendar/week" element={<Week />}/>
-              <Route path="day" element={<Day />}/>
+            <Route path="/" component={<CalendarPage/>} element={<CalendarPage/>}/>
+            <Route path="/calendar" component={<CalendarPage/>} element={<CalendarPage/>}>
+              <Route path="/calendar/year" component={<Year />} element={<Year/>}/>
+              <Route path="/calendar/month" component={<Month />} element={<Month/>}/>
+              <Route path="/calendar/week" component={<Week />} element={<Week/>}/>
+              <Route path="day" component={<Day />} element={<Day />}/>
             </Route>
-            <Route path='/clients' element={<ClientPage/>}></Route>
-            <Route path='/projects' element={<ProjectPage/>}></Route>
+            <Route path='/clients' component={<ClientPage/>} element={<ClientPage/>}/>
+            <Route path='/projects' component={<ProjectPage/>} element={<ProjectPage/>}/>
             <Route
               path="*"
-              element={
+              component={
                 <main style={{ padding: "1rem" }}>
                   <p>404 Page not found</p>
                 </main>
