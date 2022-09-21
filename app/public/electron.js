@@ -1,6 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron'); // electron
 const isDev = require('electron-is-dev'); // To check if electron is in development mode
-const { resolve } = require('path');
 const path = require('path');
 const sqlite3 = require('sqlite3');
 
@@ -235,13 +234,17 @@ ipcMain.handle('delete-client', async (event, args)=>{
 
 ipcMain.handle('get-client-by-id', async (event, args)=>{
   let data = await new Promise ((resolve, reject)=>{
+    if(args === null || args === undefined || args.length < 1){ // checking if id is present
+      console.log("id is null")
+      reject("can't find client with null id in DB")
+    }
     db.all(`SELECT * FROM client WHERE id = ${args}`,
       (err ,result)=>{
         if(err){
           reject(err)
         }
-        // resolving the result of the query
-      resolve(result[0])
+        // resolving the result of the query, if no result, return empty list
+      result !== undefined ? resolve(result[0]) : reject('no client find with that id')
     })
   });
   return data
@@ -267,6 +270,20 @@ ipcMain.handle('edit-client', async (event, args)=>{
   });
   return data
 })
+ipcMain.handle('get-projects-client', async (event, args)=>{
+  let data = await new Promise ((resolve, reject)=>{
+    db.all(`SELECT * from project
+    WHERE client_id = ${args};`,
+      (err ,result)=>{
+        if(err){
+          reject(err)
+        }
+        // resolving the result of the query
+        result !== undefined ? resolve(result) : reject('no projects found for the given client id')
+    })
+  });
+  return data
+})
 
 ipcMain.handle('get-projects', async (event, args)=>{
   console.log('handling of get-projects event in electronjs: ')
@@ -275,7 +292,6 @@ ipcMain.handle('get-projects', async (event, args)=>{
   let data = await new Promise((resolve, reject)=>{
     db.all("SELECT * from project",((err, result)=>{
       // resolving the result of the query$
-      console.log(result)
       resolve(result)
     }))
   })

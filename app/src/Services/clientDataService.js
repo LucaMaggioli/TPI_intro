@@ -28,3 +28,10 @@ export async function editClient(editedClient){
   // return a promise with the clients
   return new Promise((resolve)=>{resolve(result)})
 }
+
+export async function getProjectsForClient(id){
+    // modify the client from the electron backend that tell the database
+    let result = await window.api.getClientProjects(id);
+    // return a promise with the clients
+    return new Promise((resolve)=>{resolve(result)})
+}

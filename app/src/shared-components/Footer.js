@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { Add, NavigateBefore, NavigateNext } from '@mui/icons-material';
-import { Box, Typography, IconButton } from "@mui/material";
+import { Add } from '@mui/icons-material';
+import { Box, IconButton } from "@mui/material";
 import Filter from "./Filter";
 
 const FooterStyle = {
@@ -26,8 +26,6 @@ export default function Footer(props){
 
     return (
         <Box style={FooterStyle}>
-            {/* <IconButton style={circleButton} variant='outlined'><NavigateBefore/></IconButton>
-            <IconButton style={circleButton} variant='outlined'><NavigateNext/></IconButton> */}
             <Filter onFiltersModified={handleFilters}/>
             <IconButton style={circleButton} onClick={()=>{props.onAdd()}} variant='outlined'><Add/></IconButton>
         </Box>

@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 
 export default function Element(props){
     const [fields] = useState(props.fields)
+    const [isSubElement] = useState(props.isSubElement)
     const [ignoreFields] = useState(!props.ignoreFields? [] : props.ignoreFields)
     const [createMode] = useState(props.createMode===null ? false : props.createMode)
 
     const [element, setElement] = useState(props.element)
+    // const [element, setElement] = useState(props.subElement === null)
     const [isEditing, setIsEditing] = useState(false)
 
     useEffect(()=>{
@@ -58,8 +60,9 @@ export default function Element(props){
                             </TextField>)
                     }
                 })}
+                {props.subElement!==null?props.subElement:''}
             </CardContent>
-            <CardActions>
+            {!isSubElement && <CardActions>
                 {isEditing && <Box sx={{display:'flex', flexDirection:'row', gridGap:'8px'}}>
                     <Button onClick={handleSave} size="small" variant='contained' color="success">Save</Button>
                     <Button onClick={handleDiscard} size="small" variant='contained' color="error">Discard</Button>
@@ -67,7 +70,7 @@ export default function Element(props){
                 {!isEditing && !createMode && <Button onClick={handleEdit} size="small">Edit</Button>}
                 {!isEditing && !createMode && <Button onClick={handleDeleteElement} size="small" style={{color:'red'}}>Delete</Button>}
                 {createMode && <Button onClick={handleCreate} size="small">Create</Button>}
-            </CardActions>
+            </CardActions>}
         </Card>
     </Box>)
 }
