@@ -8,7 +8,6 @@ export default function Element(props){
     const [createMode] = useState(props.createMode===null ? false : props.createMode)
 
     const [element, setElement] = useState(props.element)
-    // const [element, setElement] = useState(props.subElement === null)
     const [isEditing, setIsEditing] = useState(false)
 
     useEffect(()=>{

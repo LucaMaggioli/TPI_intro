@@ -40,7 +40,8 @@ export default function Filter(props){
         props.onFiltersModified(newFilters)
     }
     function chipDelete(index){
-        //Include the items from index '0' to the index of the item to delete, then include the rest of array items from the index of the item to delete 
+        //Include the items from index '0' to the index of the item to delete,
+        //then include the rest of array items from the index of the item to delete 
         let newFilters = [...filters.slice(0, index), ...filters.slice(index+1, filters.length)]
         setFilters(newFilters);
         props.onFiltersModified(newFilters)
@@ -53,7 +54,7 @@ export default function Filter(props){
     return (
         <Box style={FilterStyle}>
             <Box style={flexRow}>
-                <TextField variant="outlined" size="small" style={inputStyle} value={filterToAdd} onChange={handleSearchChange}></TextField>
+                <TextField variant="outlined" size="small" style={inputStyle} value={filterToAdd} onChange={handleSearchChange}/>
                 <IconButton size='small' sx={{color:green[500]}} onClick={addFilter}><Search/></IconButton>
             </Box>
             <Box style={{...flexRow, ...{width:'400px', overflowX:'auto'}}}>
